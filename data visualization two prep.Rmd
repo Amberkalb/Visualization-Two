@@ -1,0 +1,102 @@
+---
+title: "Data_visualization_Prep"
+author: "Amber"
+date: "4/3/2017"
+output: html_document
+---
+
+```{r, include=FALSE}
+library(sp)                  # the older, more stable way
+library(sf)                  # the newer, easier way
+library(leaflet)             # for mapping
+library(scales)              # for scales
+library(tidyverse)
+library(ggmap)
+
+Netherlands<- read_csv("CopyOfNew_Neth2.csv")
+
+Regional_Immigration_geo <- read_csv("~/Week 1/Mapping/Data Visualization Two/Regional_Immigration - Data (3).csv")
+
+coords <- geocode(Regional_Immigration_geo$Region, output = "latlona")
+region_coords <- bind_cols(Regional_Immigration_geo, coords) 
+region_coords 
+
+```
+
+
+```{r, include=FALSE}
+PVV_Support <- Netherlands%>%
+  filter(Party == "PVV") %>%
+  group_by(Year, Party, Region) %>%
+  ggplot(aes(x = Year, y = `Votes %`, color = Region)) +
+  geom_line()+
+  labs(title = "Votes for the PVV by Region",
+       x = "Year", y = "Percentage of Vote", legend = "Region") +
+  theme_minimal() +
+  theme(legend.position = "bottom") 
+
+PVV_Support
+
+RecentPVV <- Netherlands[ ! Netherlands$Year %in% c(1994, 1998, 2002, 2003), ]
+
+```
+
+
+```{r}
+RecentPVV %>% 
+  filter(Party == "PVV") %>%
+  group_by(Year, Party, Region) %>%
+  ggplot(aes(x = Year, y = `Votes %`, color = Region)) +
+  geom_line()+
+  labs(title = "Votes for the PVV by Region",
+       x = "Year", y = "Percentage of Vote", legend = "Region") +
+  theme_minimal() +
+  theme(legend.position = "bottom") 
+```
+
+
+
+```{r setup, include=FALSE, warning=FALSE}
+
+coords <- geocode(Regional_Immigration_geo$Region, output = "latlona")
+region_coords <- bind_cols(Regional_Immigration_geo, coords) 
+region_coords
+
+region2010 <-region_coords[region_coords$Year == "2012",] 
+region2012 <-region_coords[region_coords$Year == "2010",]
+
+```
+
+
+
+```{r}
+
+library(leaflet)
+leaflet(region_coords) %>% addTiles() %>% 
+addCircleMarkers(data = region2010,
+                   lng = ~lon, lat = ~lat,
+                label = ~paste(Region),
+                   color = "red", radius = ~sqrt(`Total Immigration`)/30, fill = T, 
+                   popupOptions = ~Region) %>% 
+  addCircleMarkers(data = region2012, lng = ~lon, lat = ~lat,
+    fill = F, weight = 2, color = "blue", radius = ~sqrt(`Total Immigration`)/30) %>%
+
+  addLayersControl(
+    baseGroups = region2010,
+    overlayGroups = region2012
+  )
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(lattice)
+barchart(`Total Immigration`~Region,data=region_coords,groups= Year, 
+         scales=list(x=list(rot=90,cex=0.8)))
+
+```
+
