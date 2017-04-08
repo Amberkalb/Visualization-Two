@@ -94,9 +94,13 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
-library(lattice)
-barchart(`Total Immigration`~Region,data=region_coords,groups= Year, 
-         scales=list(x=list(rot=90,cex=0.8)))
+
+ggplot(region_coords, aes(group = factor (Year), y= `Total Immigration`, x= Region, fill = region_coords$Year)) + 
+    geom_bar(position="dodge", stat="identity")+
+  coord_flip() +
+ theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.background = element_rect(fill="gray90", size=.5, linetype="dotted")) +
+  scale_fill_continuous(name="Year")+
+  ggtitle("Total Immigration in the Netherlands by Region and Year")
 
 ```
 
