@@ -42,7 +42,7 @@ RecentPVV <- Netherlands[ ! Netherlands$Year %in% c(1994, 1998, 2002, 2003), ]
 ```
 
 
-```{r}
+```{r, echo=FALSE, warning=FALSE}
 RecentPVV %>% 
   filter(Party == "PVV") %>%
   group_by(Year, Party, Region) %>%
@@ -67,9 +67,9 @@ region2012 <-region_coords[region_coords$Year == "2010",]
 
 ```
 
+Blah, Blah, blah.
 
-
-```{r}
+```{r, echo= FALSE}
 
 library(leaflet)
 leaflet(region_coords) %>% addTiles() %>% 
@@ -93,7 +93,7 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r}
+```{r, echo=FALSE}
 
 ggplot(region_coords, aes(group = factor (Year), y= `Total Immigration`, x= Region, fill = region_coords$Year)) + 
     geom_bar(position="dodge", stat="identity")+
