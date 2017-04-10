@@ -56,7 +56,7 @@ PVV_Region <- RecentPVV %>%
   group_by(Year, Party, Region) %>%
   ggplot(aes(x = Year, y = `Votes %`, color = Region)) +
   geom_line()+
-  labs(title = "Votes for the PVV by Region",
+  labs(title = "Fig 1: Votes for the PVV by Region",
        x = "Year", y = "Percentage of Vote", legend = "Region") +
   theme_minimal() +
   theme(legend.position = "bottom")  
@@ -86,7 +86,7 @@ change_data <- region2012 %>%
 
 ```
 
-####Rate of Change: Immigration (2010-2012)
+####Fig. Two: Rate of Change: Immigration (2010-2012)
 ```{r, echo= FALSE}
 library(leaflet)
 leaflet(region_coords) %>% addTiles() %>% 
@@ -95,12 +95,13 @@ addCircleMarkers(data = change_data,
                 label = ~paste(Region),
                 color = "red", radius =  (change_data$rate_change2010_2012)*5, fill = T)
 ```
+###### Figure two: The red dots on the map depict the rate of immigration for each region of Netherlands between 2010 and 2012.
 
+####Findings
+Rather than finding a high rate of change for immigration in Limburg, the rate of immigration into the region is moderate with respect to fellow regions. Curiously, other regions, such as Groningen, show far less regional voter support for the PVV, while having relatively high rates of change of immigration. 
 
-Rather than finding a high rate of change for immigration into Limburg, the rate of immigration into the region is moderate with respect to fellow regions. Curiously, other regions, such as Groningen, show far less regional voter support for the PVV, while having relatively high rates of change of immigration. 
-
-### Findings
-While this finding certainly doesn't discount the ethnic competition thesis or the popular xenophobia in explaining the rise of the radical right, it does lead me to consider other factors that might be resulting in higher support in some regions besides anti-immigrant sentiments. In the case of Limburg, I might look at the local economy and politics during the 2010 parliamentary election, among other supply and demand explanations. 
+### Analysis
+While this finding certainly doesn't discount the ethnic competition thesis or the popular xenophobia in explaining the rise of the radical right, it does lead me to consider other factors that might result in higher support for right-winged parties, such as the PVV,  in some regions besides anti-immigrant sentiments. In the case of Limburg, I might look at the local economy and politics during the 2010 parliamentary election, among other supply and demand-side factors (relative deprivation, anomie/social breakdown, political discontent, etc). 
 
 ######Author's Note:
 The findings may have been more compelling had my data set included the same years as the parliamentary elections data. If I had to do this again, I would have imported and tidied all the regional immigration rates from 1994-2012 for comparability. 
