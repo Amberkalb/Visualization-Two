@@ -95,10 +95,10 @@ addCircleMarkers(data = change_data,
                 label = ~paste(Region),
                 color = "red", radius =  (change_data$rate_change2010_2012)*5, fill = T)
 ```
-###### Figure two: The red dots on the map depict the rate of immigration for each region of Netherlands between 2010 and 2012.
+###### Fig. 2: The red dots on the map depict the rate of change in immigration for each region of Netherlands between 2010 and 2012.
 
 ####Findings
-Rather than finding a high rate of change for immigration in Limburg, the rate of immigration into the region is moderate with respect to fellow regions. Curiously, other regions, such as Groningen, show far less regional voter support for the PVV, while having relatively high rates of change of immigration. 
+Rather than finding a large increase of immigration in Limburg, the rate of change from 2010-2012 into the region is moderate with respect to fellow regions. Curiously, other regions, such as Groningen, show far less regional voter support for the PVV, while having relatively high rates of immigration. 
 
 ### Analysis
 While this finding certainly doesn't discount the ethnic competition thesis or the popular xenophobia in explaining the rise of the radical right, it does lead me to consider other factors that might result in higher support for right-winged parties, such as the PVV,  in some regions besides anti-immigrant sentiments. In the case of Limburg, I might look at the local economy and politics during the 2010 parliamentary election, among other supply and demand-side factors (relative deprivation, anomie/social breakdown, political discontent, etc). 
@@ -106,5 +106,9 @@ While this finding certainly doesn't discount the ethnic competition thesis or t
 ######Author's Note:
 The findings may have been more compelling had my data set included the same years as the parliamentary elections data. If I had to do this again, I would have imported and tidied all the regional immigration rates from 1994-2012 for comparability. 
 
+##### Works Referenced
 
+Koopmans, R. (Ed.). (2005). Contested citizenship: Immigration and cultural diversity in Europe (Vol. 25). U of Minnesota Press.
+
+Norris, P. (2005). Radical right: Voters and parties in the electoral market. Cambridge University Press.
 
