@@ -4,7 +4,7 @@ author: "Amber C. Kalb"
 date: "4/10/2017"
 output:
   html_document: default
-  pdf_document: default
+  pdf_document: default 
 fig.caption: yes
 ---
 
