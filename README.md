@@ -1,3 +1,4 @@
 # Visualization-Two
 Mapping Netherlands
-Visualization-Two/Data_Visualization2.html
+
+https://amberkalb.github.io/Visualization-Two/Visualization-Two/Data_Visualization2.html
