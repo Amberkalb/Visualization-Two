@@ -1,0 +1,106 @@
+---
+title: 'Netherlands: Immigration Rates and the Parliamentary Elections, 2010-2012'
+author: "Amber C. Kalb"
+date: "4/10/2017"
+output:
+  html_document: default
+  pdf_document: default
+fig.caption: yes
+---
+
+```{r, include=FALSE}
+library(sp)                  # the older, more stable way
+library(sf)                  # the newer, easier way
+library(leaflet)             # for mapping
+library(scales)              # for scales
+library(tidyverse)
+library(ggmap)
+
+Netherlands<- read_csv("CopyOfNew_Neth2.csv")
+
+Regional_Immigration_geo <- read_csv("~/Week 1/Mapping/Data Visualization Two/Regional_Immigration - Data (3).csv")
+
+coords <- geocode(Regional_Immigration_geo$Region, output = "latlona")
+region_coords <- bind_cols(Regional_Immigration_geo, coords) 
+region_coords 
+
+```
+
+
+```{r, include=FALSE}
+PVV_Support <- Netherlands%>%
+  filter(Party == "PVV") %>%
+  group_by(Year, Party, Region) %>%
+  ggplot(aes(x = Year, y = `Votes %`, color = Region)) +
+  geom_line()+
+  labs(title = "Votes for the PVV by Region",
+       x = "Year", y = "Percentage of Vote", legend = "Region") +
+  theme_minimal() +
+  theme(legend.position = "bottom") 
+
+PVV_Support
+
+RecentPVV <- Netherlands[ ! Netherlands$Year %in% c(1994, 1998, 2002, 2003), ]
+
+```
+
+###The Rise of the People's Freedom Party in Parliament
+The rise of the Right in Europe's liberal democracies has been an area of growing interest in sociology, as well as political science and area studies among others. As the radical right reemerges from the dredges of Europe's history with electoral force, researchers have provided a variety of explanations to elcidate the radical right wing's reemergence. Two popular explanations will be explored in this data visualization essay: the ethnic competition thesis and popular xenophobia. The ethnic competition thesis focuses specifically on the issue of immigration to explain the emergence of right-winged radical parties. While there are other factors to predict voter support for radical right-winged parties, anti-immigration sentiment is considered one of the strongest predictors (Norris 2005). Furthermore, using individual-level data has shown that in France, Denmark and the Netherlands, voters living in areas with large immigrant populations were significantly more likely to vote for the radical right. The popular xenophobia explaination posits that anti-immigration sentiments are not necessarily associated with economic disparities or competition, but rather growing ethnocentricism. I introduce the popular xenophobia explanation to account for anti-immigration attitudes that largely arise during a demographic transformation of a society that can result in a national "identity crisis" (Koopmans 2005).     
+In the last data visualization essay, we looked at Netherlands' Parlimentary elections from 1994-2012. In this essay, we will focus on the elections following the establishment of the People's Freedom Party (PVV) and the rate of change for immigration by region during that time period. 
+
+The graph below shows the percentage of the vote garnered by the PVV by region in the Netherlands.   
+
+```{r, echo=FALSE, warning=FALSE}
+PVV_Region <- RecentPVV %>% 
+  filter(Party == "PVV") %>%
+  group_by(Year, Party, Region) %>%
+  ggplot(aes(x = Year, y = `Votes %`, color = Region)) +
+  geom_line()+
+  labs(title = "Votes for the PVV by Region",
+       x = "Year", y = "Percentage of Vote", legend = "Region") +
+  theme_minimal() +
+  theme(legend.position = "bottom")  
+
+PVV_Region
+```
+
+
+The data reveals that the PVV's largest proportion of a regional votes was, by far, won in Limburg. Keeping both the ethnic competition thesis and popular xenophobia explanations for the rise of the right in mind, I turn to immigration data to explore the relationship between the votes garnered in support of the PVV and recent immigration rates by region. 
+
+The map below charts the Netherlands and the red dots represent the positive rate of change for each region from 2010 to 2012.    
+
+```{r setup, include=FALSE, warning=FALSE}
+
+coords <- geocode(Regional_Immigration_geo$Region, output = "latlona")
+region_coords <- bind_cols(Regional_Immigration_geo, coords) 
+region_coords
+
+region2010 <-region_coords[region_coords$Year == "2010",] 
+region2012 <-region_coords[region_coords$Year == "2012",]
+
+
+rate_change <- ((region2012$`Total Immigration` - region2010$`Total Immigration`) / (region2010$`Total Immigration`)) * 100
+
+change_data <- region2012 %>%
+  mutate(rate_change2010_2012 = rate_change)
+
+```
+
+###Rate of Change: Immigration (2010-2012)
+```{r, echo= FALSE}
+library(leaflet)
+leaflet(region_coords) %>% addTiles() %>% 
+addCircleMarkers(data = change_data,
+                   lng = ~lon, lat = ~lat,
+                label = ~paste(Region),
+                color = "red", radius =  (change_data$rate_change2010_2012)*5, fill = T)
+```
+
+
+Rather than finding a high rate of change for immigration into Limburg, the rate of immigration into the region is moderate with respect to fellow regions. Curiously, other regions, such as Groningen, show far less regional voter support for the PVV, while having relatively high rates of change of immigration. 
+
+### Findings
+While this finding certainly doesn't discount the ethnic competition thesis or the popular xenophobia in explaining the rise of the radical right, it does lead me to consider other factors that might be resulting in higher support in some regions as opposed to others besides anti-immigrant sentiments. In the case of Limburg, I might look at the local economy and politics during the 2010 parlimentary election, among other supply and demand explanations. 
+
+
+

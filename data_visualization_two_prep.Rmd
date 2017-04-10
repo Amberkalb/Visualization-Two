@@ -1,8 +1,11 @@
 ---
-title: "Data_visualization_Prep"
-author: "Amber"
-date: "4/3/2017"
-output: html_document
+title: 'Netherlands: Immigration Rates and the Parliamentary Elections, 2010-2012'
+author: "Amber C. Kalb"
+date: "4/10/2017"
+output:
+  pdf_document: default
+  html_document: default
+fig.caption: yes
 ---
 
 ```{r, include=FALSE}
@@ -41,6 +44,10 @@ RecentPVV <- Netherlands[ ! Netherlands$Year %in% c(1994, 1998, 2002, 2003), ]
 
 ```
 
+###The Rise of the People's Freedom Party in Parliament
+The rise of the Right in Europe's liberal democracies has been an area of growing interest in sociology, as well as political science and area studies among others. As the radical right reemerges from the dredges of Europe's history with electoral force, researchers have provided a variety of explanations to elcidate the radical right wing's reemergence. Two popular explanations will be explored in this data visualization essay: the ethnic competition thesis and popular xenophobia. The ethnic competition thesis focuses specifically on the issue of immigration to explain the emergence of right-winged radical parties. While there are other factors to predict voter support for radical right-winged parties, anti-immigration sentiment is considered one of the strongest predictors (Norris 2005). Furthermore, using individual-level data has shown that in France, Denmark and the Netherlands, The popular xenophobia explaination posits that anti-immigration sentiments are not necessarily associated with economic disparities or competition, but rather growing ethnocentricism. I introduce the popular xenophobia explanation to account for anti-immigration attitudes that largely arise during a demographic transformation of a society that can result in a national "identity crisis".     
+
+In the last data visualization, we looked at Netherlands' Parlimentary elections from 1994-2012. In this essay, we will focus on the final two elections in the data, 20 and 2012, when the People's Freedom Party (PVV) won their largest portion of seats in parliament.  
 
 ```{r, echo=FALSE, warning=FALSE}
 RecentPVV %>% 
@@ -62,30 +69,32 @@ coords <- geocode(Regional_Immigration_geo$Region, output = "latlona")
 region_coords <- bind_cols(Regional_Immigration_geo, coords) 
 region_coords
 
-region2010 <-region_coords[region_coords$Year == "2012",] 
-region2012 <-region_coords[region_coords$Year == "2010",]
+region2010 <-region_coords[region_coords$Year == "2010",] 
+region2012 <-region_coords[region_coords$Year == "2012",]
+
+
+rate_change <- ((region2012$`Total Immigration` - region2010$`Total Immigration`) / (region2010$`Total Immigration`)) * 100
+
+change_data <- region2012 %>%
+  mutate(rate_change2010_2012 = rate_change)
 
 ```
 
-Blah, Blah, blah.
+scale each region/year data, then run it through the code (consider making a new column through mutate)
 
-```{r, echo= FALSE}
 
+
+
+Shows the rate of immigration change from 2010 to 2010 
+```{r}
 library(leaflet)
 leaflet(region_coords) %>% addTiles() %>% 
-addCircleMarkers(data = region2010,
+addCircleMarkers(data = change_data,
                    lng = ~lon, lat = ~lat,
                 label = ~paste(Region),
-                   color = "red", radius = ~sqrt(`Total Immigration`)/30, fill = T, 
-                   popupOptions = ~Region) %>% 
-  addCircleMarkers(data = region2012, lng = ~lon, lat = ~lat,
-    fill = F, weight = 2, color = "blue", radius = ~sqrt(`Total Immigration`)/30) %>%
-
-  addLayersControl(
-    baseGroups = region2010,
-    overlayGroups = region2012
-  )
+                color = "red", radius =  (change_data$rate_change2010_2012)*5, fill = T) 
 ```
+
 
 ## R Markdown
 
